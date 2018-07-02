@@ -1,5 +1,5 @@
 from keras.models import Sequential
-from keras.layers import Dense,Activation,Dropout,Flatten,Reshape,Permute
+from keras.layers import Dense,Activation,Dropout,Flatten,Reshape,Permute,Lambda
 
 
 # Dense 全连接层
@@ -53,3 +53,38 @@ model.add(Flatten())
 # model output (None,65536)
 
 
+
+# Reshape 层
+# Reshape层用来将输入shape转换为特定的shape
+
+model.add(Reshape((3,4),input_shape=(12,)))
+
+model.add(Reshape((6,2)))
+
+
+# Lambda 层
+# 本函数用以对上一层的输出施以任何Theano/TensorFlow表达式
+
+model.add(Lambda(lambda x:x**2))
+
+
+
+# ActivityRegularizer 层
+# 经过本层的数据不会有任何变化，但会基于其激活值更新损失函数值
+# keras.layers.core.ActivityRegularization(l1=0.0, l2=0.0)
+# l1：1范数正则因子（正浮点数）
+# l2：2范数正则因子（正浮点数）
+
+
+
+# # Masking 层
+# 使用给定的值对输入的序列信号进行“屏蔽”，用以定位需要跳过的时间步
+# 对于输入张量的时间步，即输入张量的第1维度（维度从0开始算，见例子），
+# 如果输入张量在该时间步上都等于mask_value，则该时间步将在模型接下来的所有层（只要支持masking）被跳过（屏蔽）。
+# 如果模型接下来的一些层不支持masking，却接受到masking过的数据，则抛出异常。
+
+from keras.layers import LSTM,Masking
+
+
+model.add(Masking(mask_value=0,input_shape=(1,1)))
+model.add(LSTM(32))
